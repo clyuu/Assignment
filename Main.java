@@ -1,4 +1,6 @@
 import java.util.*;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 class Customer {
     private String name;
@@ -23,9 +25,21 @@ class Customer {
         return mobileNumber;
     }
 
+    public String getEmail() {  
+        return email;
+    }
+
+    public String getCity() {  
+        return city;
+    }
+
+    public int getAge() { 
+        return age;
+    }
+
     @Override
     public String toString() {
-        return "Customer{name='" + name + "', mobile='" + mobileNumber + "', city='" + city + "', age=" + age + "}";
+        return "Customer{name='" + name + "', mobile='" + mobileNumber + "', city='" + city + "', age=" + age + "}"; 
     }
 }
 
@@ -84,6 +98,11 @@ class Bus {
         bubbleSort(availableSeats);
     }
 
+    // Added the getTotalSeats() method to return totalSeats
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+
     private void bubbleSort(List<Integer> list) {
         int n = list.size();
         for (int i = 0; i < n - 1; i++) {
@@ -99,9 +118,10 @@ class Bus {
 
     @Override
     public String toString() {
-        return "Bus{busNumber='" + busNumber + "', startingPoint='" + startingPoint + "', endingPoint='" + endingPoint + "', fare=" + fare + "}";
+        return "Bus{busNumber='" + busNumber + "', startingPoint='" + startingPoint + "', endingPoint='" + endingPoint + "', fare=" + fare + "}"; 
     }
 }
+
 
 class Reservation {
     private static int idCounter = 1;
@@ -135,7 +155,7 @@ class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{id=" + reservationId + ", customer=" + customer + ", bus=" + bus + ", seatNumber=" + seatNumber + "}";
+        return "Reservation{id=" + reservationId + ", customer=" + customer + ", bus=" + bus + ", seatNumber=" + seatNumber + "}"; 
     }
 }
 
@@ -145,22 +165,39 @@ class BusReservationSystem {
     private List<Reservation> reservations = new ArrayList<>();
     private Queue<Customer> waitingQueue = new LinkedList<>();
 
-    public void registerCustomer(String id, Customer customer) {
-        if (customers.containsKey(id)) {
-            System.out.println("Customer with this ID already exists.");
+    public void registerCustomer(Customer customer) {
+        if (customers.containsKey(customer.getName())) {
+            System.out.println("Customer with this name already exists.");
             return;
         }
-        customers.put(id, customer);
-        System.out.println("Customer registered successfully: " + customer);
+        customers.put(customer.getName(), customer);
+        System.out.println("\n=== Customer Registration Successful ===");
+        System.out.println(String.format("%-20s: %s", "Customer Name", customer.getName()));
+        System.out.println(String.format("%-20s: %s", "Mobile Number", customer.getMobileNumber()));
+        System.out.println(String.format("%-20s: %s", "Email", customer.getEmail()));  
+        System.out.println(String.format("%-20s: %s", "City", customer.getCity()));    
+        System.out.println(String.format("%-20s: %d", "Age", customer.getAge()));      
+        System.out.println("=========================================");
     }
 
-    public void registerBus(String id, Bus bus) {
-        if (buses.containsKey(id)) {
-            System.out.println("Bus with this ID already exists.");
+    public void registerBus(Bus bus) {
+        if (buses.containsKey(bus.getBusNumber())) {
+            System.out.println("Bus with this number already exists.");
             return;
         }
-        buses.put(id, bus);
-        System.out.println("Bus registered successfully: " + bus);
+        buses.put(bus.getBusNumber(), bus);
+        System.out.println("\n=== Bus Registration Successful ===");
+        System.out.println(String.format("%-20s: %s", "Bus Number", bus.getBusNumber()));
+        System.out.println(String.format("%-20s: %d", "Total Seats", bus.getTotalSeats()));  
+        System.out.println(String.format("%-20s: %s", "Starting Point", bus.getStartingPoint()));
+        System.out.println(String.format("%-20s: %s", "Ending Point", bus.getEndingPoint()));
+        System.out.println(String.format("%-20s: %s", "Starting Time", bus.getStartingTime()));
+
+        // Using NumberFormat to display fare in Rs.
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+        String formattedFare = currencyFormat.format(bus.getFare());
+        System.out.println(String.format("%-20s: %s", "Fare", formattedFare));
+        System.out.println("=====================================");
     }
 
     public void searchBuses(String startingPoint, String endingPoint) {
@@ -173,7 +210,11 @@ class BusReservationSystem {
                 System.out.printf("%-20s: %s\n", "Starting Point", bus.getStartingPoint());
                 System.out.printf("%-20s: %s\n", "Ending Point", bus.getEndingPoint());
                 System.out.printf("%-20s: %s\n", "Starting Time", bus.getStartingTime());
-                System.out.printf("%-20s: %.2f\n", "Fare", bus.getFare());
+
+                // Using NumberFormat to display fare in Rs.
+                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+                String formattedFare = currencyFormat.format(bus.getFare());
+                System.out.printf("%-20s: %s\n", "Fare", formattedFare);
                 System.out.printf("%-20s: %s\n", "Available Seats", bus.getAvailableSeats());
                 System.out.println("========================================================");
                 found = true;
@@ -184,18 +225,18 @@ class BusReservationSystem {
         }
     }
 
-    public void reserveSeat(String customerId, String busId) {
-        if (!customers.containsKey(customerId)) {
-            System.out.println("Invalid Customer ID: " + customerId);
+    public void reserveSeat(String customerName, String busNumber) {
+        if (!customers.containsKey(customerName)) {
+            System.out.println("Invalid Customer Name: " + customerName);
             return;
         }
-        if (!buses.containsKey(busId)) {
-            System.out.println("Invalid Bus ID: " + busId);
+        if (!buses.containsKey(busNumber)) {
+            System.out.println("Invalid Bus Number: " + busNumber);
             return;
         }
 
-        Customer customer = customers.get(customerId);
-        Bus bus = buses.get(busId);
+        Customer customer = customers.get(customerName);
+        Bus bus = buses.get(busNumber);
 
         if (bus.getAvailableSeats().isEmpty()) {
             System.out.println("No available seats. Adding customer to the waiting list.");
@@ -212,46 +253,41 @@ class BusReservationSystem {
             bus.reserveSeat(selectedSeat);
             Reservation reservation = new Reservation(customer, bus, selectedSeat);
             reservations.add(reservation);
-            System.out.println("\n      Sent Notification");
-            System.out.println("=== Reservation Successful ===");
+
+            // Show reservation details before asking for payment
+            System.out.println("\n=== Reservation Details ===");
             System.out.println("Customer: " + customer.getName());
             System.out.println("Reservation ID: " + reservation.getReservationId());
             System.out.println("Bus: " + bus.getBusNumber());
             System.out.println("Seat: " + selectedSeat);
-            System.out.println("==============================\n");
+
+            // Using NumberFormat to display fare in Rs.
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+            String formattedFare = currencyFormat.format(bus.getFare());
+            System.out.println(String.format("Total Fare: %s", formattedFare));  // Displaying fare in Rs.
+
+            // Ask for payment confirmation
+            System.out.print("Do you want to confirm the payment (Yes/No)? ");
+            String paymentConfirmation = scanner.next();
+
+            if (paymentConfirmation.equalsIgnoreCase("Yes")) {
+                System.out.println("Payment Successful!");
+                // Sent Notification message
+                System.out.println("\n      Sent Notification");
+                System.out.println("\n=== Reservation Successful ===");
+                System.out.println("Customer: " + customer.getName());
+                System.out.println("Reservation ID: " + reservation.getReservationId());
+                System.out.println("Bus: " + bus.getBusNumber());
+                System.out.println("Seat: " + selectedSeat);
+                System.out.println("==============================\n");
+            } else {
+                // If payment is not confirmed, cancel reservation
+                bus.cancelSeat(selectedSeat);
+                reservations.remove(reservation);
+                System.out.println("Reservation Canceled due to payment failure.");
+            }
         } else {
             System.out.println("The selected seat is not available. Please choose another seat.");
-        }
-    }
-
-    public void cancelReservation(int reservationId) {
-        Reservation reservationToCancel = null;
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservationId() == reservationId) {
-                reservationToCancel = reservation;
-                break;
-            }
-        }
-
-        if (reservationToCancel == null) {
-            System.out.println("Reservation ID not found.");
-            return;
-        }
-
-        reservations.remove(reservationToCancel);
-        Bus bus = reservationToCancel.getBus();
-        int seatNumber = reservationToCancel.getSeatNumber();
-        bus.cancelSeat(seatNumber);
-        System.out.println("\n      Sent Notification");
-        System.out.println("=== Reservation Canceled ===");
-        System.out.println("Customer: " + reservationToCancel.getCustomer().getName());
-        System.out.println("Reservation ID: " + reservationToCancel.getReservationId());
-        System.out.println("Refund Amount: " + bus.getFare());
-        System.out.println("============================\n");
-
-        if (!waitingQueue.isEmpty()) {
-            Customer nextCustomer = waitingQueue.poll();
-            reserveSeat(nextCustomer.getMobileNumber(), bus.getBusNumber());
         }
     }
 
@@ -271,7 +307,11 @@ class BusReservationSystem {
             System.out.printf("%-20s: %d\n", "Seat Number", reservation.getSeatNumber());
             System.out.printf("%-20s: %s\n", "Starting Point", reservation.getBus().getStartingPoint());
             System.out.printf("%-20s: %s\n", "Ending Point", reservation.getBus().getEndingPoint());
-            System.out.printf("%-20s: %.2f\n", "Fare", reservation.getBus().getFare());
+
+            // Using NumberFormat to display fare in Rs.
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+            String formattedFare = currencyFormat.format(reservation.getBus().getFare());
+            System.out.printf("%-20s: %s\n", "Fare", formattedFare);
             System.out.println("========================================================");
         }
     }
@@ -279,13 +319,45 @@ class BusReservationSystem {
     // New method to display waiting queue
     public void displayWaitingQueue() {
         if (waitingQueue.isEmpty()) {
-            System.out.println("Please waiting for five minuts in queue.");
+            System.out.println("Please waiting for five minutes in queue.");
             return;
         }
 
         System.out.println("\nCurrent Waiting Queue:");
         for (Customer customer : waitingQueue) {
             System.out.println(customer);
+        }
+    }
+
+    public void cancelReservation(int reservationId) {
+        Reservation reservationToCancel = null;
+        for (Reservation reservation : reservations) {
+            if (reservation.getReservationId() == reservationId) {
+                reservationToCancel = reservation;
+                break;
+            }
+        }
+
+        if (reservationToCancel != null) {
+            reservations.remove(reservationToCancel);
+            Bus bus = reservationToCancel.getBus();
+            bus.cancelSeat(reservationToCancel.getSeatNumber());
+
+            // Display Sent Notification, Cancellation Details, and Refund Amount
+            System.out.println("\n      Sent Notification");
+            System.out.println("\n=== Reservation Canceled ===");
+            System.out.println("Customer: " + reservationToCancel.getCustomer().getName());
+            System.out.println("Reservation ID: " + reservationToCancel.getReservationId());
+            System.out.println("Bus: " + bus.getBusNumber());
+            System.out.println("Seat: " + reservationToCancel.getSeatNumber());
+
+            // Using NumberFormat to display refund in Rs.
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+            String formattedRefund = currencyFormat.format(bus.getFare());
+            System.out.println(String.format("Refund Amount: %s", formattedRefund));  // Show refund amount
+            System.out.println("==============================\n");
+        } else {
+            System.out.println("No reservation found with this ID.");
         }
     }
 }
@@ -303,8 +375,8 @@ public class Main {
             System.out.println("4. Reserve Seat");
             System.out.println("5. Cancel Reservation");
             System.out.println("6. Display Reservations");
-            System.out.println("7. Add Another Reservation");  // New option
-            System.out.println("8. Exit");                   // Updated exit
+            System.out.println("7. Display Waiting Queue");  // New option for waiting queue
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             int choice;
@@ -319,8 +391,6 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Customer ID: ");
-                    String id = scanner.nextLine();
                     System.out.print("Enter Name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter Mobile Number: ");
@@ -339,12 +409,10 @@ public class Main {
                         scanner.nextLine();
                         break;
                     }
-                    system.registerCustomer(id, new Customer(name, mobile, email, city, age));
+                    system.registerCustomer(new Customer(name, mobile, email, city, age));
                     break;
 
                 case 2:
-                    System.out.print("Enter Bus ID: ");
-                    String busId = scanner.nextLine();
                     System.out.print("Enter Bus Number: ");
                     String busNumber = scanner.nextLine();
                     System.out.print("Enter Total Seats: ");
@@ -373,7 +441,7 @@ public class Main {
                         scanner.nextLine();
                         break;
                     }
-                    system.registerBus(busId, new Bus(busNumber, totalSeats, start, end, time, fare));
+                    system.registerBus(new Bus(busNumber, totalSeats, start, end, time, fare));
                     break;
 
                 case 3:
@@ -385,11 +453,11 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.print("Enter Customer ID: ");
-                    String customerId = scanner.nextLine();
-                    System.out.print("Enter Bus ID: ");
-                    String reserveBusId = scanner.nextLine();
-                    system.reserveSeat(customerId, reserveBusId);
+                    System.out.print("Enter Customer Name: ");
+                    String customerName = scanner.nextLine();
+                    System.out.print("Enter Bus Number: ");
+                    String reserveBusNumber = scanner.nextLine();
+                    system.reserveSeat(customerName, reserveBusNumber);
                     break;
 
                 case 5:
