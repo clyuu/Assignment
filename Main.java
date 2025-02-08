@@ -365,7 +365,7 @@ public class Main {
             System.out.println("4. Reserve Seat");
             System.out.println("5. Cancel Reservation");
             System.out.println("6. Display Reservations");
-            System.out.println("7. Add Another Register Customer");   
+            System.out.println("7. Add Another Reserve Seat");   
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             int choice;
