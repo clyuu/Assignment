@@ -98,7 +98,6 @@ class Bus {
         bubbleSort(availableSeats);
     }
 
-    // Added the getTotalSeats() method to return totalSeats
     public int getTotalSeats() {
         return totalSeats;
     }
@@ -193,7 +192,6 @@ class BusReservationSystem {
         System.out.println(String.format("%-20s: %s", "Ending Point", bus.getEndingPoint()));
         System.out.println(String.format("%-20s: %s", "Starting Time", bus.getStartingTime()));
 
-        // Using NumberFormat to display fare in Rs.
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
         String formattedFare = currencyFormat.format(bus.getFare());
         System.out.println(String.format("%-20s: %s", "Fare", formattedFare));
@@ -211,7 +209,6 @@ class BusReservationSystem {
                 System.out.printf("%-20s: %s\n", "Ending Point", bus.getEndingPoint());
                 System.out.printf("%-20s: %s\n", "Starting Time", bus.getStartingTime());
 
-                // Using NumberFormat to display fare in Rs.
                 NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
                 String formattedFare = currencyFormat.format(bus.getFare());
                 System.out.printf("%-20s: %s\n", "Fare", formattedFare);
@@ -254,19 +251,16 @@ class BusReservationSystem {
             Reservation reservation = new Reservation(customer, bus, selectedSeat);
             reservations.add(reservation);
 
-            // Show reservation details before asking for payment
             System.out.println("\n=== Reservation Details ===");
             System.out.println("Customer: " + customer.getName());
             System.out.println("Reservation ID: " + reservation.getReservationId());
             System.out.println("Bus: " + bus.getBusNumber());
             System.out.println("Seat: " + selectedSeat);
 
-            // Using NumberFormat to display fare in Rs.
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
             String formattedFare = currencyFormat.format(bus.getFare());
             System.out.println(String.format("Total Fare: %s", formattedFare));  // Displaying fare in Rs.
 
-            // Ask for payment confirmation
             System.out.print("Do you want to confirm the payment (Yes/No)? ");
             String paymentConfirmation = scanner.next();
 
@@ -281,7 +275,6 @@ class BusReservationSystem {
                 System.out.println("Seat: " + selectedSeat);
                 System.out.println("==============================\n");
             } else {
-                // If payment is not confirmed, cancel reservation
                 bus.cancelSeat(selectedSeat);
                 reservations.remove(reservation);
                 System.out.println("Reservation Canceled due to payment failure.");
@@ -308,7 +301,6 @@ class BusReservationSystem {
             System.out.printf("%-20s: %s\n", "Starting Point", reservation.getBus().getStartingPoint());
             System.out.printf("%-20s: %s\n", "Ending Point", reservation.getBus().getEndingPoint());
 
-            // Using NumberFormat to display fare in Rs.
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
             String formattedFare = currencyFormat.format(reservation.getBus().getFare());
             System.out.printf("%-20s: %s\n", "Fare", formattedFare);
@@ -316,7 +308,6 @@ class BusReservationSystem {
         }
     }
 
-    // New method to display waiting queue
     public void displayWaitingQueue() {
         if (waitingQueue.isEmpty()) {
             System.out.println("Please waiting for five minutes in queue.");
@@ -343,7 +334,6 @@ class BusReservationSystem {
             Bus bus = reservationToCancel.getBus();
             bus.cancelSeat(reservationToCancel.getSeatNumber());
 
-            // Display Sent Notification, Cancellation Details, and Refund Amount
             System.out.println("\n      Sent Notification");
             System.out.println("\n=== Reservation Canceled ===");
             System.out.println("Customer: " + reservationToCancel.getCustomer().getName());
@@ -375,7 +365,7 @@ public class Main {
             System.out.println("4. Reserve Seat");
             System.out.println("5. Cancel Reservation");
             System.out.println("6. Display Reservations");
-            System.out.println("7. Display Waiting Queue");  // New option for waiting queue
+            System.out.println("7. Display Waiting Queue");  
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
@@ -478,7 +468,7 @@ public class Main {
                     system.displayReservations();
                     break;
 
-                case 7:  // New case for waiting queue
+                case 7:  
                     system.displayWaitingQueue();
                     break;
 
