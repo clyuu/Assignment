@@ -259,14 +259,13 @@ class BusReservationSystem {
 
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
             String formattedFare = currencyFormat.format(bus.getFare());
-            System.out.println(String.format("Total Fare: %s", formattedFare));  // Displaying fare in Rs.
+            System.out.println(String.format("Total Fare: %s", formattedFare));  
 
             System.out.print("Do you want to confirm the payment (Yes/No)? ");
             String paymentConfirmation = scanner.next();
 
             if (paymentConfirmation.equalsIgnoreCase("Yes")) {
                 System.out.println("Payment Successful!");
-                // Sent Notification message
                 System.out.println("\n      Sent Notification");
                 System.out.println("\n=== Reservation Successful ===");
                 System.out.println("Customer: " + customer.getName());
@@ -341,10 +340,10 @@ class BusReservationSystem {
             System.out.println("Bus: " + bus.getBusNumber());
             System.out.println("Seat: " + reservationToCancel.getSeatNumber());
 
-            // Using NumberFormat to display refund in Rs.
+            
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
             String formattedRefund = currencyFormat.format(bus.getFare());
-            System.out.println(String.format("Refund Amount: %s", formattedRefund));  // Show refund amount
+            System.out.println(String.format("Refund Amount: %s", formattedRefund));  
             System.out.println("==============================\n");
         } else {
             System.out.println("No reservation found with this ID.");
