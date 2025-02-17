@@ -9,7 +9,7 @@ class Customer {
     private String city;
     private int age;
 
-    public Customer(String name, String mobileNumber, String email, String city, int age) {
+    public Customer(String name, String mobileNumber, String email, String city, int age) {//Cundoctor
         this.name = name;
         this.mobileNumber = mobileNumber;
         this.email = email;
@@ -37,7 +37,7 @@ class Customer {
         return age;
     }
 
-    @Override
+    @Override//annotation
     public String toString() {
         return "Customer{name='" + name + "', mobile='" + mobileNumber + "', city='" + city + "', age=" + age + "}"; 
     }
@@ -59,9 +59,9 @@ class Bus {
         this.endingPoint = endingPoint;
         this.startingTime = startingTime;
         this.fare = fare;
-        this.availableSeats = new ArrayList<>();
+        this.availableSeats = new ArrayList<>();//Every bus starts with a new, empty list of available seats.
         for (int i = 1; i <= totalSeats; i++) {
-            availableSeats.add(i);
+            availableSeats.add(i);//add the seat number to the list of available seats.
         }
     }
 
@@ -85,17 +85,17 @@ class Bus {
         return fare;
     }
 
-    public List<Integer> getAvailableSeats() {
+    public List<Integer> getAvailableSeats() {//return the list of available seats.
         return availableSeats;
     }
 
-    public boolean reserveSeat(int seatNumber) {
+    public boolean reserveSeat(int seatNumber) {//  remove the seat number from the list of available seats.
         return availableSeats.remove((Integer) seatNumber);
     }
 
-    public void cancelSeat(int seatNumber) {
+    public void cancelSeat(int seatNumber) {//add the seat number back to the list of available seats.
         availableSeats.add(seatNumber);
-        bubbleSort(availableSeats);
+        bubbleSort(availableSeats);//sort the list of available seats.
     }
 
     public int getTotalSeats() {
@@ -103,10 +103,10 @@ class Bus {
     }
 
     private void bubbleSort(List<Integer> list) {
-        int n = list.size();
+        int n = list.size();//get the size of the list.
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                if (list.get(j) > list.get(j + 1)) {
+                if (list.get(j) > list.get(j + 1)) {//compare the current element with the next element.
                     int temp = list.get(j);
                     list.set(j, list.get(j + 1));
                     list.set(j + 1, temp);
@@ -115,21 +115,21 @@ class Bus {
         }
     }
 
-    @Override
+    @Override//annotation
     public String toString() {
         return "Bus{busNumber='" + busNumber + "', startingPoint='" + startingPoint + "', endingPoint='" + endingPoint + "', fare=" + fare + "}"; 
     }
 }
 
 
-class Reservation {
+class Reservation {//create a new class named Reservation.
     private static int idCounter = 1;
     private int reservationId;
     private Customer customer;
     private Bus bus;
     private int seatNumber;
 
-    public Reservation(Customer customer, Bus bus, int seatNumber) {
+    public Reservation(Customer customer, Bus bus, int seatNumber) {//constructor
         this.reservationId = idCounter++;
         this.customer = customer;
         this.bus = bus;
@@ -159,50 +159,49 @@ class Reservation {
 }
 
 class BusReservationSystem {
-    private Map<String, Customer> customers = new HashMap<>();
+    private Map<String, Customer> customers = new HashMap<>();//create a new map named customers.
     private Map<String, Bus> buses = new HashMap<>();
     private List<Reservation> reservations = new ArrayList<>();
     private Queue<Customer> waitingQueue = new LinkedList<>();
 
-    public void registerCustomer(Customer customer) {
+    public void registerCustomer(Customer customer) {//add the customer to the map of customers.
         if (customers.containsKey(customer.getName())) {
             System.out.println("Customer with this name already exists.");
             return;
         }
-        customers.put(customer.getName(), customer);
+        customers.put(customer.getName(), customer);//add the customer to the map of customers.
         System.out.println("\n=== Customer Registration Successful ===");
         System.out.println(String.format("%-20s: %s", "Customer Name", customer.getName()));
-        System.out.println(String.format("%-20s: %s", "Mobile Number", customer.getMobileNumber()));
         System.out.println(String.format("%-20s: %s", "Email", customer.getEmail()));  
         System.out.println(String.format("%-20s: %s", "City", customer.getCity()));    
         System.out.println(String.format("%-20s: %d", "Age", customer.getAge()));      
         System.out.println("=========================================");
     }
 
-    public void registerBus(Bus bus) {
+    public void registerBus(Bus bus) {//add the bus to the map of buses.
         if (buses.containsKey(bus.getBusNumber())) {
             System.out.println("Bus with this number already exists.");
             return;
         }
-        buses.put(bus.getBusNumber(), bus);
+        buses.put(bus.getBusNumber(), bus);//add the bus to the map of buses.
         System.out.println("\n=== Bus Registration Successful ===");
-        System.out.println(String.format("%-20s: %s", "Bus Number", bus.getBusNumber()));
+        System.out.println(String.format("%-20s: %s", "Bus Number", bus.getBusNumber()));// display the bus details.
         System.out.println(String.format("%-20s: %d", "Total Seats", bus.getTotalSeats()));  
         System.out.println(String.format("%-20s: %s", "Starting Point", bus.getStartingPoint()));
         System.out.println(String.format("%-20s: %s", "Ending Point", bus.getEndingPoint()));
         System.out.println(String.format("%-20s: %s", "Starting Time", bus.getStartingTime()));
 
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));//format the fare as currency.
         String formattedFare = currencyFormat.format(bus.getFare());
         System.out.println(String.format("%-20s: %s", "Fare", formattedFare));
         System.out.println("=====================================");
     }
 
-    public void searchBuses(String startingPoint, String endingPoint) {
+    public void searchBuses(String startingPoint, String endingPoint) {//search for buses based on the starting and ending points.
         System.out.println("\nSearching buses from " + startingPoint + " to " + endingPoint);
         boolean found = false;
         for (Bus bus : buses.values()) {
-            if (bus.getStartingPoint().equalsIgnoreCase(startingPoint) && bus.getEndingPoint().equalsIgnoreCase(endingPoint)) {
+            if (bus.getStartingPoint().equalsIgnoreCase(startingPoint) && bus.getEndingPoint().equalsIgnoreCase(endingPoint)) {//check if the bus matches the search query.
                 System.out.println("========================================================");
                 System.out.printf("%-20s: %s\n", "Bus Number", bus.getBusNumber());
                 System.out.printf("%-20s: %s\n", "Starting Point", bus.getStartingPoint());
@@ -217,38 +216,38 @@ class BusReservationSystem {
                 found = true;
             }
         }
-        if (!found) {
+        if (!found) {//display a message if no buses are found.
             System.out.println("No buses found for the given route.");
         }
     }
 
-    public void reserveSeat(String customerName, String busNumber) {
+    public void reserveSeat(String customerName, String busNumber) {//reserve a seat for a customer on a bus.
         if (!customers.containsKey(customerName)) {
             System.out.println("Invalid Customer Name: " + customerName);
             return;
         }
-        if (!buses.containsKey(busNumber)) {
+        if (!buses.containsKey(busNumber)) {//check if the bus exists.
             System.out.println("Invalid Bus Number: " + busNumber);
             return;
         }
 
-        Customer customer = customers.get(customerName);
+        Customer customer = customers.get(customerName);//get the customer object from the map of customers.
         Bus bus = buses.get(busNumber);
 
-        if (bus.getAvailableSeats().isEmpty()) {
+        if (bus.getAvailableSeats().isEmpty()) {//check if there are any available seats.
             System.out.println("No available seats. Adding customer to the waiting list.");
-            waitingQueue.add(customer);
+            waitingQueue.add(customer);//add the customer to the waiting queue.
             return;
         }
 
-        System.out.println("Available seats for Bus " + bus.getBusNumber() + ": " + bus.getAvailableSeats());
+        System.out.println("Available seats for Bus " + bus.getBusNumber() + ": " + bus.getAvailableSeats());//display the available seats.
         System.out.print("Please select a seat number: ");
         Scanner scanner = new Scanner(System.in);
         int selectedSeat = scanner.nextInt();
 
-        if (bus.getAvailableSeats().contains(selectedSeat)) {
+        if (bus.getAvailableSeats().contains(selectedSeat)) {//check if the selected seat is available.seat is reserved
             bus.reserveSeat(selectedSeat);
-            Reservation reservation = new Reservation(customer, bus, selectedSeat);
+            Reservation reservation = new Reservation(customer, bus, selectedSeat);//create a new reservation object.
             reservations.add(reservation);
 
             System.out.println("\n=== Reservation Details ===");
@@ -257,14 +256,14 @@ class BusReservationSystem {
             System.out.println("Bus: " + bus.getBusNumber());
             System.out.println("Seat: " + selectedSeat);
 
-            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
-            String formattedFare = currencyFormat.format(bus.getFare());
-            System.out.println(String.format("Total Fare: %s", formattedFare));  
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));//format the fare as currency.
+            String formattedFare = currencyFormat.format(bus.getFare());//format the fare as currency.
+            System.out.println(String.format("Total Fare: %s", formattedFare));  //format the fare as currency.
 
-            System.out.print("Do you want to confirm the payment (Yes/No)? ");
-            String paymentConfirmation = scanner.next();
+            System.out.print("Do you want to confirm the payment (Yes/No)? ");//prompt the user to confirm the payment.
+            String paymentConfirmation = scanner.next();//get the payment confirmation from the user.
 
-            if (paymentConfirmation.equalsIgnoreCase("Yes")) {
+            if (paymentConfirmation.equalsIgnoreCase("Yes")) {//check if the user confirms the payment.
                 System.out.println("Payment Successful!");
                 System.out.println("\n      Sent Notification");
                 System.out.println("\n=== Reservation Successful ===");
@@ -274,8 +273,8 @@ class BusReservationSystem {
                 System.out.println("Seat: " + selectedSeat);
                 System.out.println("==============================\n");
             } else {
-                bus.cancelSeat(selectedSeat);
-                reservations.remove(reservation);
+                bus.cancelSeat(selectedSeat);//cancel the reservation if the payment fails.
+                reservations.remove(reservation);//cancel the reservation if the payment fails.
                 System.out.println("Reservation Canceled due to payment failure.");
             }
         } else {
@@ -283,14 +282,14 @@ class BusReservationSystem {
         }
     }
 
-    public void displayReservations() {
-        if (reservations.isEmpty()) {
+    public void displayReservations() {//display all the reservations.
+        if (reservations.isEmpty()) {//check if there are any reservations.
             System.out.println("No reservations found.");
             return;
         }
 
         System.out.println("\nAll Reservations:");
-        for (Reservation reservation : reservations) {
+        for (Reservation reservation : reservations) {//iterate through the list of reservations.
             System.out.println("========================================================");
             System.out.printf("%-20s: %d\n", "Reservation ID", reservation.getReservationId());
             System.out.printf("%-20s: %s\n", "Customer Name", reservation.getCustomer().getName());
@@ -300,38 +299,39 @@ class BusReservationSystem {
             System.out.printf("%-20s: %s\n", "Starting Point", reservation.getBus().getStartingPoint());
             System.out.printf("%-20s: %s\n", "Ending Point", reservation.getBus().getEndingPoint());
 
-            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
-            String formattedFare = currencyFormat.format(reservation.getBus().getFare());
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));//format the fare as currency.
+            String formattedFare = currencyFormat.format(reservation.getBus().getFare());//format the fare as currency.
             System.out.printf("%-20s: %s\n", "Fare", formattedFare);
             System.out.println("========================================================");
         }
     }
 
-    public void displayWaitingQueue() {
-        if (waitingQueue.isEmpty()) {
+    public void displayWaitingQueue() {//display the waiting queue.
+        if (waitingQueue.isEmpty()) {//check if there are any customers in the waiting queue.
             System.out.println("Please waiting for five minutes in queue.");
             return;
         }
 
         System.out.println("\nCurrent Waiting Queue:");
-        for (Customer customer : waitingQueue) {
-            System.out.println(customer);
+        for (Customer customer : waitingQueue) {//iterate through the waiting queue.
+            System.out.println(customer);//display the customer details.
+            System.out.println("\nPlease waiting for five minutes in queue.");
         }
     }
 
-    public void cancelReservation(int reservationId) {
-        Reservation reservationToCancel = null;
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservationId() == reservationId) {
-                reservationToCancel = reservation;
+    public void cancelReservation(int reservationId) {//cancel a reservation based on the reservation ID.
+        Reservation reservationToCancel = null;//initialize a variable to store the reservation to cancel.
+        for (Reservation reservation : reservations) {//iterate through the list of reservations.
+            if (reservation.getReservationId() == reservationId) {//check if the reservation ID matches.
+                reservationToCancel = reservation;//store the reservation to cancel.
                 break;
             }
         }
 
-        if (reservationToCancel != null) {
-            reservations.remove(reservationToCancel);
-            Bus bus = reservationToCancel.getBus();
-            bus.cancelSeat(reservationToCancel.getSeatNumber());
+        if (reservationToCancel != null) {//check if the reservation to cancel exists.
+            reservations.remove(reservationToCancel);//remove the reservation from the list of reservations.
+            Bus bus = reservationToCancel.getBus();//get the bus object from the reservation.
+            bus.cancelSeat(reservationToCancel.getSeatNumber());//cancel the seat reservation.
 
             System.out.println("\n      Sent Notification");
             System.out.println("\n=== Reservation Canceled ===");
@@ -342,7 +342,7 @@ class BusReservationSystem {
 
             
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
-            String formattedRefund = currencyFormat.format(bus.getFare());
+            String formattedRefund = currencyFormat.format(bus.getFare());//format the refund amount as currency.
             System.out.println(String.format("Refund Amount: %s", formattedRefund));  
             System.out.println("==============================\n");
         } else {
@@ -354,7 +354,7 @@ class BusReservationSystem {
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        BusReservationSystem system = new BusReservationSystem();
+        BusReservationSystem system = new BusReservationSystem();//create a new BusReservationSystem object.
 
         while (true) {
             System.out.println("\nMenu:");
